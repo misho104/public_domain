@@ -1,5 +1,5 @@
-% Usage: llmk diagrams.tex
-% (if you are not using TeXLive < 2021, install llmk by yourself or execute, e.g.,
+% Use draw.pl to generate separated PDFs
+% (or
 %   pdflatex -jobname=diagrams_WHL1 diagrams.tex
 % )
 
@@ -9,51 +9,6 @@
 % worldwide. This software is distributed without any warranty.
 % You should have received a copy of the CC0 Public Domain Dedication along with
 % this software. If not, see http://creativecommons.org/publicdomain/zero/1.0/
-
-%+++
-% sequence=["WHL1", "WHL2", "BLR", "BHL", "BHR", "blob", "QED", "EW", "HVP", "HLBL"]
-%
-% [programs.WHL1]
-% command="lualatex"
-% opts=["-jobname=diagrams_WHL1"]
-%
-% [programs.WHL2]
-% command="lualatex"
-% opts=["-jobname=diagrams_WHL2"]
-%
-% [programs.BLR]
-% command="lualatex"
-% opts=["-jobname=diagrams_BLR"]
-%
-% [programs.BHL]
-% command="lualatex"
-% opts=["-jobname=diagrams_BHL"]
-%
-% [programs.BHR]
-% command="lualatex"
-% opts=["-jobname=diagrams_BHR"]
-%
-% [programs.blob]
-% command="lualatex"
-% opts=["-jobname=diagrams_blob"]
-%
-% [programs.QED]
-% command="lualatex"
-% opts=["-jobname=diagrams_QED"]
-%
-% [programs.EW]
-% command="lualatex"
-% opts=["-jobname=diagrams_EW"]
-%
-% [programs.HVP]
-% command="lualatex"
-% opts=["-jobname=diagrams_HVP"]
-%
-% [programs.HLBL]
-% command="lualatex"
-% opts=["-jobname=diagrams_HLBL"]
-%+++
-
 
 \documentclass[12pt,a4paper]{article}
 \usepackage{amsmath,amssymb,slashed,cancel}
@@ -154,12 +109,21 @@
   \node [anchor=south] at (   0, +0.71) {#2};
   %\node [anchor=south] at (   0, -0.48) {#3}; % upper than the line
   \node [anchor=south] at (   0, -1.18) {#3};  % lower than the line
-  \begin{feynman}\diagram*{#4};\end{feynman}#5;%
+  \begin{feynman}\diagram*{#4};\end{feynman}#5%
 \end{tikzpicture}
 \endpgfgraphicnamed
 }
 
+%#job: diagrams_MSSM1
+\gmtwodiagram{MSSM1}{$\widetilde \chi^\pm$ or $\widetilde \chi^0$}{$\widetilde\nu_\mu$ or $\widetilde\mu$}{
+  (mu1) -- [fermion] (c1),
+  (c2) -- [fermion] (mu2),
+  (cxaway) -- [boson] (gam); % photon
+  (c1) -- [quarter left,plain,boson] (c0) -- [quarter left,plain,boson] (c2), % upper
+  (c1) -- [scalar] (c2), %lower
+}{}
 
+%#job: diagrams_WHL1
 \gmtwodiagram{WHL1}{$\widetilde W^\pm$--$\widetilde H^\pm$}{$\widetilde\nu_\mu$}{
   (mu1) -- [fermion] (c1),
   (c2) -- [fermion] (mu2),
@@ -169,6 +133,7 @@
   (c1) -- [scalar] (c2), %lower
 }{}
 
+%#job: diagrams_WHL2
 \gmtwodiagram{WHL2}{$\widetilde\mu\w L$}{$\widetilde W^0$--$\widetilde H^0$}{
   (mu1) -- [fermion] (c1),
   (c2) -- [fermion] (mu2),
@@ -177,6 +142,7 @@
   (c1) -- [plain,boson,insertion={[size=1mm]0.5}] (c2), % lower
 }{\relax}
 
+%#job: diagrams_BLR
 \gmtwodiagram{BLR}{$\widetilde\mu\w L$--$\widetilde\mu\w R$}{$\widetilde B$}{
   (mu1) -- [fermion] (c1),
   (c2) -- [fermion] (mu2),
@@ -186,6 +152,7 @@
   (c1) -- [plain,boson] (c2), %lower
 }{\relax}
 
+%#job: diagrams_BHL
 \gmtwodiagram{BHL}{$\widetilde\mu\w L$}{\phantom{x}$\widetilde B$--$\widetilde H^0$}{
   (mu1) -- [fermion] (c1),
   (c2) -- [fermion] (mu2),
@@ -194,6 +161,7 @@
   (c1) -- [plain,boson,insertion={[size=1mm]0.5}] (c2), % lower
 }{\relax}
 
+%#job: diagrams_BHR
 \gmtwodiagram{BHR}{$\widetilde\mu\w R$}{$\widetilde H^0$--$\widetilde B$\phantom{x}}{
   (mu1) -- [fermion] (c1),
   (c2) -- [fermion] (mu2),
@@ -202,6 +170,7 @@
   (c1) -- [plain,boson,insertion={[size=1mm]0.5}] (c2), % lower
 }{\relax}
 
+%#job: diagrams_blob
 \gmtwodiagram{blob}{}{}{
     (mu1) -- [fermion] (c1p);
     (c2p) -- [fermion] (mu2);
@@ -210,7 +179,15 @@
   \filldraw[fill=gray](0,-0.2) circle (0.7);
 }
 
-
+%#job: diagrams_vanilla
+\gmtwodiagram{vanilla}{}{}{
+    (mu1) -- [fermion] (c1p);
+    (c2p) -- [fermion] (mu2);
+    (cx) -- [boson] (gam);
+}{%
+  \filldraw[fill=white](0,0) circle (0.9);
+}
+%#job: diagrams_QED
 \gmtwodiagram{QED}{}{}{
     (mu1) -- [fermion] (c1p);
     (c2p) -- [fermion] (mu2);
@@ -220,6 +197,7 @@
   \node [anchor=center] at (   0, 0) {QED};
 }
 
+%#job: diagrams_EW
 \gmtwodiagram{EW}{}{}{
     (mu1) -- [fermion] (c1p);
     (c2p) -- [fermion] (mu2);
@@ -229,6 +207,7 @@
   \node [anchor=center] at (   0, 0) {EW};
  }
 
+%#job: diagrams_HVP
 \gmtwodiagram{HVP}{}{}{
     (mu1) -- [fermion] (c1) -- [quarter left] (c0) -- [quarter left] (c2) -- [fermion] (mu2);
     (cx) -- [boson] (gam);
@@ -245,6 +224,7 @@
    \end{scope}
 }
 
+%#job: diagrams_HLBL
 \gmtwodiagram{HLBL}{}{}{
     (mu1) -- [fermion] (c1) -- (c2) -- [fermion] (mu2);
     (c1) -- [boson] (c0) -- [boson] {(c2), (c3), (gam)};
